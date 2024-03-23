@@ -37,3 +37,11 @@ Menambahkan variabel status_line pada fungsi `handle_connection` yang menunjukan
 Dalam menangani permintaan `GET /sleep HTTP/1.1`, server akan memberikan delay selama 5 detik karena terdapat kode `thread::sleep(Duration::from_secs(5))`. Setelah itu, server mengirim `respons HTTP 200 (OK)` bersama dengan isi file `hello.html`.
 
 Pengaplikasian _slow response_ ini bertujuan untuk menguji bagiamana perilaku aplikasi ketika mendapat load dari banyak user sekaligus. Load ini menyebabkan respon yang lebih lama dari yang diharapkan.
+
+### Commit 5
+
+`ThreadPool` digunakan untuk mengimplementasikan multi-threading di web-server. Threadpool juga bertugas untuk mengelola sejumlah thread yang berjalan serentak. Pada commit ini juga saya membuat struktur `Worker` yang bertugas menerima dan menjalankan kode yang dikirimkan ke `ThreadPool`. Terdapat juga `Job` yang berisi informasi tugas yang akan dijalankan oleh Worker.
+
+Terdapat juga channel `mpsc::channel()` untuk memfasilitasi komunikasi antara `ThreadPool` dengan `Worker`. Ketika `ThreadPool` menerima request untuk menjalankan sebuah `Job`, sinyal akan dikirimkan oleh sender ke receiver Worker melalui `channel`.
+
+Dalam `Worker`, terdapat satu thread yang looping menunggu masuknya data (`receiver`). Pada saat data diterima, Worker akan mengunci `receiver` untuk menjalankan proses dengan `while let Ok(job) = receiver.lock().unwrap().recv()`. Setelah proses selesai dijalankan, `lock` pada receiver dilepas sehingga Worker dapat menerima dan menjalankan Job berikutnya.
