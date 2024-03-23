@@ -17,3 +17,7 @@ let http_request: Vec<String> = buf_reader
 Memisahkan tiap line, kemudian mengubahnya menjadi vector
 
 Fungsi handle_connection membaca lines dari TCP stream sampai menemukan empty line, lalu mengubah lines-lines yang sudah di read menjadi vector, lalu kemudian melakukan print vector tersebut ke console. Hal ini dilakukan untuk melakukan read headers dari sebuah HTTP request.
+
+### Commit 2
+
+Menambahkan variabel status_line pada fungsi `handle_connection` yang menunjukan status line HTTP, yaitu "HTTP/1.1 200 OK". Variabel ini memberikan informasi kepada user bahwa permintaan berhasil (kode status 200). Lalu, akan dikirimkan file HTML statis sebagai respons `(hello.html)`. Respons dibaca menggunakan `fs::read_to_string` dan dimasukkan ke dalam variabel contents. Panjang konten dari file HTML dihitung menggunakan `contents.len() `untuk menentukan ukuran respons. Respons disusun menggunakan `format!` untuk mencakup status line, panjang konten, dan isi konten.
