@@ -31,3 +31,9 @@ Menambahkan variabel status_line pada fungsi `handle_connection` yang menunjukan
 - Respons HTTP dibagi berdasarkan permintaan yang diterima dari user menggunakan conditional if-else. Jika permintaan adalah `GET / HTTP/1.1`, server akan mengirimkan respons `HTTP 200 (OK)` bersama dengan konten dari file `hello.html`. Namun, jika permintaan tidak dikenali, server akan mengirimkan respons `HTTP 404 (Not Found)` bersama dengan konten dari file `404.html`.
 
 - Alasan melakukan refaktor: condition if-else sebelum dilakukan refactoring cenderung menghasilkan duplikasi. Setelah melakukan refactor, kita lebih mudah melihat perbedaan dari kedua kasus if-else, dan memudahkan kita untuk melakukan perubahan kedepannya
+
+### Commit 4
+
+Dalam menangani permintaan `GET /sleep HTTP/1.1`, server akan memberikan delay selama 5 detik karena terdapat kode `thread::sleep(Duration::from_secs(5))`. Setelah itu, server mengirim `respons HTTP 200 (OK)` bersama dengan isi file `hello.html`.
+
+Pengaplikasian _slow response_ ini bertujuan untuk menguji bagiamana perilaku aplikasi ketika mendapat load dari banyak user sekaligus. Load ini menyebabkan respon yang lebih lama dari yang diharapkan.
